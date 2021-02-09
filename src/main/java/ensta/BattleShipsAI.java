@@ -1,8 +1,9 @@
 package ensta;
-package ensta.AbstractShip;
 
 import java.io.Serializable;
 import java.util.*;
+
+import ensta.AbstractShip.AbstractShip;
 
 public class BattleShipsAI implements Serializable {
 

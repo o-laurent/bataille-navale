@@ -1,1 +1,10 @@
-/home/olivier/Documents/ENSTA/2A/IN205/bataille_navale/bataille-navale/src/main/java/ensta/App.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/BattleShipsAI.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/IBoard.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/ColorUtil.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/Hit.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/Game.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/App.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/InputHelper.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/Player.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/AIPlayer.java
+/home/olivier/Documents/ENSTA/2A/IN205/bataille-navale/src/main/java/ensta/Board.java

@@ -1,4 +1,6 @@
 package ensta;
+package ensta.AbstractShip;
+
 import java.io.Serializable;
 import java.util.*;
 

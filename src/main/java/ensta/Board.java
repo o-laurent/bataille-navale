@@ -2,11 +2,13 @@ package ensta;
 
 public class Board {
     private String name;
+    private int gridSize;
     private Character[][] shipGrid;
     private Boolean[][] hitGrid;
 
     public Board(String name, int gridSize) {
         this.name = name;
+        this.gridSize = gridSize;
         this.shipGrid = new Character[gridSize][gridSize];
         this.hitGrid = new Boolean[gridSize][gridSize];
     }
@@ -19,6 +21,10 @@ public class Board {
 
     public String getName() {
         return this.name;
+    }
+
+    public int getSize() {
+        return this.gridSize;
     }
 
     public Character[][] getShip() {
@@ -38,6 +44,9 @@ public class Board {
             System.out.println();
         }
         System.out.println("Hit Grid");
+        for (Character c='A'; c<'A'+getSize(); c++) {
+            System.out.print(c+" ");
+        }
         for (Boolean[] x : getHit()) {
             for (Boolean y : x) {
                 if (y) {

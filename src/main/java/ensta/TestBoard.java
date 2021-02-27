@@ -8,7 +8,6 @@ import ensta.AbstractShip.Orientation;
 public class TestBoard {
     public static void main(String[] args) {
         Board player1Board = new Board("Player 1");
-        Board player2Board = new Board("Player 2");
         Carrier carrier = new Carrier(Orientation.EAST);
         BattleShip bShip = new BattleShip(Orientation.SOUTH);
         Destroyer destr = new Destroyer(Orientation.SOUTH);

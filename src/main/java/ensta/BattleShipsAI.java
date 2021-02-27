@@ -7,7 +7,7 @@ import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
 
 public class BattleShipsAI implements Serializable {
-
+    private static final long serialVersionUID = 11L;
     /*
      * ** Attributs
      */

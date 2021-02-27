@@ -111,8 +111,6 @@ public class Game {
         try {
             if (!SAVE_FILE.exists()) {
                 SAVE_FILE.getAbsoluteFile().getParentFile().mkdirs();
-            } else {
-                File SAVE_FILE = new File("savegame.dat");
             }
             OutputStream os = new FileOutputStream(SAVE_FILE);
             ObjectOutput o = new ObjectOutputStream(os);

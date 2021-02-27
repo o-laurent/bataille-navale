@@ -1,13 +1,8 @@
 package ensta;
 
-import java.io.Serializable;
 import java.util.List;
 
 import ensta.AbstractShip.AbstractShip;
-import ensta.AbstractShip.BattleShip;
-import ensta.AbstractShip.Carrier;
-import ensta.AbstractShip.Destroyer;
-import ensta.AbstractShip.Submarine;
 
 public class AIPlayer extends Player {
     private static final long serialVersionUID = 2L;
@@ -33,8 +28,4 @@ public class AIPlayer extends Player {
         return this.ai.sendHit(coords);
     }
 
-    private static AbstractShip[] createDefaultShips() {
-        return new AbstractShip[] { new Destroyer(), new Submarine(), new Submarine(), new BattleShip(),
-                new Carrier() };
-    }
 }

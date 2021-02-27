@@ -51,7 +51,7 @@ public class BattleShipsAI implements Serializable {
     public BattleShipsAI(IBoard myBoard, IBoard opponentBoard) {
         this.board = myBoard;
         this.opponent = opponentBoard;
-        size = board.getSize();
+        this.size = board.getSize();
     }
 
     /*
@@ -93,7 +93,7 @@ public class BattleShipsAI implements Serializable {
      * @return the status of the hit.
      */
     public Hit sendHit(int[] coords) {
-        // TRUE COORDINATES !!!! 0-size-1
+        // TRUE COORDINATES !!!! [0, size-1]
         int res[] = null;
         if (coords == null || coords.length < 2) {
             throw new IllegalArgumentException("must provide an initialized array of size 2");
@@ -129,10 +129,10 @@ public class BattleShipsAI implements Serializable {
             res = pickRandomCoord();
         }
 
-        Hit hit = opponent.sendHit(res[0], res[1]);
+        Hit hit = this.opponent.sendHit(res[0], res[1]);
 
         try {
-            board.setHit(hit != Hit.MISS, res[0], res[1]);
+            this.board.setHit(hit != Hit.MISS, res[0], res[1]);
         } catch (Exception err) {
             System.out.println(err);
             System.out.println("Development error");

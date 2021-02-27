@@ -1,6 +1,10 @@
 package ensta.AbstractShip;
 
-public class AbstractShip {
+import java.io.Serializable;
+
+public class AbstractShip implements Serializable{
+    private static final long serialVersionUID = 4L;
+    
     private Character label;
     private String fullname;
     private int size;
@@ -37,7 +41,7 @@ public class AbstractShip {
     }
     public boolean isSunk()
     {
-        if (size == strikeCount) {
+        if (this.size == this.strikeCount) {
             return true;
         } else {
             return false;

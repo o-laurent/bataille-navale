@@ -1,8 +1,12 @@
 package ensta.AbstractShip;
 
+import java.io.Serializable;
+
 import ensta.ColorUtil;
 
-public class ShipState {
+public class ShipState implements Serializable {
+    private static final long serialVersionUID = 7L;
+
     private AbstractShip ship;
     private boolean struck;
 
@@ -49,7 +53,7 @@ public class ShipState {
                 return ".";
 
         } else if (!this.struck) {
-            return ship.getLabel().toString();
+            return this.ship.getLabel().toString();
         } else
             return ColorUtil.colorize(ship.getLabel(), ColorUtil.Color.RED);
     }

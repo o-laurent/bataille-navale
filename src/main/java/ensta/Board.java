@@ -1,16 +1,21 @@
 package ensta;
 
+import java.io.Serializable;
+
 import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
 import ensta.AbstractShip.ShipState;
 
-public class Board implements IBoard {
+public class Board implements IBoard, Serializable{
+    private static final long serialVersionUID = 3L;
+
     private String name;
     private int gridSize;
     private ShipState[][] shipGrid;
     private Boolean[][] hitGrid;
 
     public void putShip(AbstractShip ship, int x, int y) throws Exception {
+        // USER COORDINATES
         int gridSize = getSize();
         if (hasShip(x, y)) {
             throw new Exception("There is already a ship at these coordinates.");
@@ -29,7 +34,7 @@ public class Board implements IBoard {
                     if (hasShip(x, y + i)) {
                         throw new Exception("There is already a ship at these coordinates.");
                     }
-                    shipGrid[x - 1][y + i - 1] = new ShipState(ship);
+                    this.shipGrid[x - 1][y + i - 1] = new ShipState(ship);
                 }
                 break;
             case WEST:
@@ -40,7 +45,7 @@ public class Board implements IBoard {
                     if (hasShip(x, y - i)) {
                         throw new Exception("There is already a ship at these coordinates.");
                     }
-                    shipGrid[x - 1][y - i - 1] = new ShipState(ship);
+                    this.shipGrid[x - 1][y - i - 1] = new ShipState(ship);
                 }
                 break;
             case SOUTH:
@@ -51,7 +56,7 @@ public class Board implements IBoard {
                     if (hasShip(x + i, y)) {
                         throw new Exception("There is already a ship at these coordinates.");
                     }
-                    shipGrid[x + i - 1][y - 1] = new ShipState(ship);
+                    this.shipGrid[x + i - 1][y - 1] = new ShipState(ship);
                 }
                 break;
 
@@ -63,7 +68,7 @@ public class Board implements IBoard {
                     if (hasShip(x - i, y)) {
                         throw new Exception("There is already a ship at these coordinates.");
                     }
-                    shipGrid[x - i - 1][y - 1] = new ShipState(ship);
+                    this.shipGrid[x - i - 1][y - 1] = new ShipState(ship);
                 }
                 break;
         }
@@ -71,20 +76,20 @@ public class Board implements IBoard {
     }
 
     public boolean hasShip(int x, int y) throws Exception {
-        int size = getSize();
+        int size = this.getSize();
         if (x < 1 || y < 1 || x > size || y > size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return !(shipGrid[x - 1][y - 1].getShip() == null || shipGrid[x - 1][y - 1].isSunk());
+        return !(this.shipGrid[x - 1][y - 1].getShip() == null || this.shipGrid[x - 1][y - 1].isSunk());
     }
 
     public void setHit(boolean hit, int x, int y) throws Exception {
         // TRUE COORDINATES !!
-        int size = getSize();
+        int size = this.getSize();
         if (x < 0 || y < 0 || x >= size || y >= size) {
             throw new Exception("The coordinates are wrong.");
         }
-        hitGrid[x][y] = hit;
+        this.hitGrid[x][y] = hit;
     }
 
     public Boolean getHit(int x, int y) throws Exception {
@@ -92,7 +97,7 @@ public class Board implements IBoard {
         if (x < 0 || y < 0 || x >= size || y >= size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return hitGrid[x][y];
+        return this.hitGrid[x][y];
     }
 
     /**
@@ -134,7 +139,8 @@ public class Board implements IBoard {
     public Hit sendHit(int x, int y) {
         // TRUE COORDINATES
         int value = 0;
-        ShipState shipState = getShipGrid()[x][y];
+        ShipState shipState = this.getShipGrid()[x][y];
+        System.out.println("x:"+x+" y:"+y);
         try {
             shipState.addStrike();
         } catch (Exception exception) {

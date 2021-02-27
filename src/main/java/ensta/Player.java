@@ -6,7 +6,8 @@ import java.util.List;
 import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
 
-public class Player {
+public class Player implements Serializable {
+    private static final long serialVersionUID = 1L;
     /*
      * ** Attributs
      */
@@ -38,41 +39,43 @@ public class Player {
         int i = 0;
 
         do {
-            AbstractShip s = ships[i];
+            AbstractShip s = this.ships[i];
             String msg = String.format("placer %d : %s(%d)", i + 1, s.getFullname(), s.getSize());
             System.out.println(msg);
             InputHelper.ShipInput res = InputHelper.readShipInput();
             ++i;
+            int x = 0;
+            int y = 0;
 
             try {
                 if (res.orientation.charAt(0) == 'n') {
                     s.setOrientation(Orientation.NORTH);
                 }
-                
+
                 else if (res.orientation.charAt(0) == 's') {
                     s.setOrientation(Orientation.SOUTH);
                 }
-                
+
                 else if (res.orientation.charAt(0) == 'e') {
                     s.setOrientation(Orientation.EAST);
                 }
-                
+
                 else if (res.orientation.charAt(0) == 'w') {
                     s.setOrientation(Orientation.WEST);
-                }
-                else {
+                } else {
                     System.out.println("Error. Please type n, s, e or w.");
                 }
-                int x = res.x;
-                int y = res.y;
+                y = res.y;
+                x = res.x;
 
-                board.putShip(s, x, y);
+                this.board.putShip(s, x + 1, y + 1);
             } catch (Exception exc) {
+                System.out.println("Erreur dans le placement du bâteau: x=" + x + " y=" + y);
                 --i;
             }
             done = (i == 5);
-            
-            board.print();
+
+            this.board.print();
         } while (!done);
     }
 
@@ -84,11 +87,14 @@ public class Player {
         do {
             System.out.println("Où souhaitez-vous frapper?");
             hitInput = InputHelper.readCoordInput();
-            
+
+            System.out.println("x:" + hitInput.x + " y:" + hitInput.y);
             hit = this.opponentBoard.sendHit(hitInput.x, hitInput.y);
-            if (hit != Hit.ERROR) done = true;
-            else System.out.println("Tir refusé ! Les coordonnées sont impossibles ou zone déjà touchée.");
-            
+            if (hit != Hit.ERROR)
+                done = true;
+            else
+                System.out.println("Tir refusé ! Les coordonnées sont impossibles ou zone déjà touchée.");
+
         } while (!done);
         coords[0] = hitInput.x;
         coords[1] = hitInput.y;
@@ -96,7 +102,7 @@ public class Player {
     }
 
     public AbstractShip[] getShips() {
-        return ships;
+        return this.ships;
     }
 
     public void setShips(AbstractShip[] ships) {

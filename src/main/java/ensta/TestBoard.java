@@ -8,18 +8,26 @@ import ensta.AbstractShip.Orientation;
 
 public class TestBoard {
     public static void main(String[] args) {
-        Board testBoard = new Board("Test");
+        Board player1Board = new Board("Player 1");
+        Board player2Board = new Board("Player 2");
         Carrier carrier = new Carrier(Orientation.EAST);
         BattleShip bShip = new BattleShip(Orientation.SOUTH);
         Destroyer destr = new Destroyer(Orientation.SOUTH);
         try {
-            testBoard.putShip(carrier, 1, 1);
-            testBoard.putShip(bShip, 2, 1);
-            testBoard.putShip(destr, 9, 1);
+            player1Board.putShip(carrier, 1, 1);
+            player1Board.putShip(bShip, 2, 1);
+            player1Board.putShip(destr, 9, 1);
         }
         catch (Exception errException) {
             System.out.println(errException);
         }
-        testBoard.print();
+    
+        System.out.println(player1Board.sendHit(1, 1));
+        System.out.println(player1Board.sendHit(1, 2));
+        System.out.println(player1Board.sendHit(1, 3));
+        System.out.println(player1Board.sendHit(1, 4));
+        System.out.println(player1Board.sendHit(1, 5));
+        System.out.println(player1Board.sendHit(5, 5));
+        player1Board.print();
     }
 }

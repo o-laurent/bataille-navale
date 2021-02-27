@@ -11,6 +11,7 @@ public class ShipState {
             throw new Exception("The ship has already been struck");
         } else {
             this.struck = true;
+            getShip().addStrike();
         }
     }
 
@@ -41,11 +42,15 @@ public class ShipState {
     }
 
     public String toString() {
-        if (this.ship != null) {
-            // return ColorUtil.colorize(ship.getFullname(), ColorUtil.Color.RED);
+        if (this.ship == null) {
+            if (this.struck)
+                return ColorUtil.colorize(".", ColorUtil.Color.RED);
+            else
+                return ".";
+
+        } else if (!this.struck) {
             return ship.getLabel().toString();
-        } else {
-            return ".";
-        }
+        } else
+            return ColorUtil.colorize(ship.getLabel(), ColorUtil.Color.RED);
     }
 }

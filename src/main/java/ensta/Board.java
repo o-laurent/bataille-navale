@@ -63,7 +63,7 @@ public class Board implements IBoard {
         if (x < 1 || y < 1 || x > size || y > size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return !(shipGrid[x - 1][y - 1].getShip() == null);
+        return !(shipGrid[x - 1][y - 1].getShip() == null || shipGrid[x - 1][y - 1].isSunk());
     }
 
     public void setHit(boolean hit, int x, int y) throws Exception {
@@ -118,7 +118,37 @@ public class Board implements IBoard {
         return this.hitGrid;
     }
 
-    
+    public Hit sendHit(int x, int y) {
+        int value = 0;
+        ShipState shipState = getShipGrid()[x-1][y-1];
+        try {
+            shipState.addStrike();
+        } catch (Exception exception) {
+            value = 0; // Error
+        }
+        if (shipState.getShip() == null) {
+            value = -1;
+        } else if (!shipState.isSunk()) {
+            value = -2;
+        } else {
+            switch (shipState.getShip().getFullname()) {
+                case "Destroyer":
+                    value = 2;
+                    break;
+                case "Submarine":
+                    value = 3;
+                    break;
+                case "Battleship":
+                    value = 4;
+                    break;
+                case "Carrier":
+                    value = 5;
+                    break;
+            }
+        }
+
+        return Hit.fromInt(value);
+    }
 
     /**
      * Print the two boards

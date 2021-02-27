@@ -1,10 +1,14 @@
 package ensta;
+
 import java.io.Serializable;
 import java.util.List;
 
+import ensta.AbstractShip.AbstractShip;
+import ensta.AbstractShip.Orientation;
+
 public class Player {
-    /* **
-     * Attributs
+    /*
+     * ** Attributs
      */
     protected Board board;
     protected Board opponentBoard;
@@ -12,8 +16,8 @@ public class Player {
     protected AbstractShip[] ships;
     protected boolean lose;
 
-    /* **
-     * Constructeur
+    /*
+     * ** Constructeur
      */
     public Player(Board board, Board opponentBoard, List<AbstractShip> ships) {
         this.board = board;
@@ -21,12 +25,13 @@ public class Player {
         this.opponentBoard = opponentBoard;
     }
 
-    /* **
-     * Méthodes
+    /*
+     * ** Méthodes
      */
 
     /**
-     * Read keyboard input to get ships coordinates. Place ships on given coodrinates.
+     * Read keyboard input to get ships coordinates. Place ships on given
+     * coodrinates.
      */
     public void putShips() {
         boolean done = false;
@@ -34,31 +39,55 @@ public class Player {
 
         do {
             AbstractShip s = ships[i];
-            String msg = String.format("placer %d : %s(%d)", i + 1, s.getName(), s.getLength());
+            String msg = String.format("placer %d : %s(%d)", i + 1, s.getFullname(), s.getSize());
             System.out.println(msg);
             InputHelper.ShipInput res = InputHelper.readShipInput();
-            // TODO set ship orientation
-            // TODO put ship at given position
-
-            // TODO when ship placement successful
             ++i;
-            done = i == 5;
 
+            try {
+                if (res.orientation.charAt(0) == 'n') {
+                    s.setOrientation(Orientation.NORTH);
+                }
+                
+                else if (res.orientation.charAt(0) == 's') {
+                    s.setOrientation(Orientation.SOUTH);
+                }
+                
+                else if (res.orientation.charAt(0) == 'e') {
+                    s.setOrientation(Orientation.EAST);
+                }
+                
+                else if (res.orientation.charAt(0) == 'w') {
+                    s.setOrientation(Orientation.WEST);
+                }
+                else {
+                    System.out.println("Error. Please type n, s, e or w.");
+                }
+                int x = res.x;
+                int y = res.y;
+
+                board.putShip(s, x, y);
+            } catch (Exception exc) {
+                --i;
+            }
+            done = (i == 5);
+            
             board.print();
         } while (!done);
     }
 
     public Hit sendHit(int[] coords) {
-        boolean done;
+        boolean done = false;
         Hit hit = null;
 
         do {
             System.out.println("où frapper?");
             InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
-            // TODO call sendHit on this.opponentBoard
-
+            
+            this.opponentBoard.sendHit(hitInput.x, hitInput.y);
             // TODO : Game expects sendHit to return BOTH hit result & hit coords.
             // return hit is obvious. But how to return coords at the same time ?
+            
         } while (!done);
 
         return hit;

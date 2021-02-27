@@ -81,10 +81,12 @@ public class Player {
         Hit hit = null;
 
         do {
-            System.out.println("où frapper?");
+            System.out.println("Où souhaitez-vous frapper?");
             InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
             
-            this.opponentBoard.sendHit(hitInput.x, hitInput.y);
+            hit = this.opponentBoard.sendHit(hitInput.x, hitInput.y);
+            if (hit != Hit.ERROR) done = true;
+            else System.out.println("Tir refusé ! Les coordonnées sont impossibles ou zone déjà touchée.");
             // TODO : Game expects sendHit to return BOTH hit result & hit coords.
             // return hit is obvious. But how to return coords at the same time ?
             

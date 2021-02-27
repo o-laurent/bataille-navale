@@ -26,6 +26,9 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
+                    if (hasShip(x, y + i)) {
+                        throw new Exception("There is already a ship at these coordinates.");
+                    }
                     shipGrid[x - 1][y + i - 1] = new ShipState(ship);
                 }
                 break;
@@ -34,6 +37,9 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
+                    if (hasShip(x, y - i)) {
+                        throw new Exception("There is already a ship at these coordinates.");
+                    }
                     shipGrid[x - 1][y - i - 1] = new ShipState(ship);
                 }
                 break;
@@ -42,6 +48,9 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
+                    if (hasShip(x + i, y)) {
+                        throw new Exception("There is already a ship at these coordinates.");
+                    }
                     shipGrid[x + i - 1][y - 1] = new ShipState(ship);
                 }
                 break;
@@ -51,6 +60,9 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
+                    if (hasShip(x - i, y)) {
+                        throw new Exception("There is already a ship at these coordinates.");
+                    }
                     shipGrid[x - i - 1][y - 1] = new ShipState(ship);
                 }
                 break;
@@ -67,19 +79,20 @@ public class Board implements IBoard {
     }
 
     public void setHit(boolean hit, int x, int y) throws Exception {
+        // TRUE COORDINATES !!
         int size = getSize();
-        if (x < 1 || y < 1 || x > size || y > size) {
+        if (x < 0 || y < 0 || x >= size || y >= size) {
             throw new Exception("The coordinates are wrong.");
         }
-        hitGrid[x - 1][y - 1] = true;
+        hitGrid[x][y] = hit;
     }
 
     public Boolean getHit(int x, int y) throws Exception {
         int size = getSize();
-        if (x < 1 || y < 1 || x > size || y > size) {
+        if (x < 0 || y < 0 || x >= size || y >= size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return hitGrid[x - 1][y - 1];
+        return hitGrid[x][y];
     }
 
     /**
@@ -119,8 +132,9 @@ public class Board implements IBoard {
     }
 
     public Hit sendHit(int x, int y) {
+        // TRUE COORDINATES
         int value = 0;
-        ShipState shipState = getShipGrid()[x-1][y-1];
+        ShipState shipState = getShipGrid()[x][y];
         try {
             shipState.addStrike();
         } catch (Exception exception) {
@@ -154,7 +168,7 @@ public class Board implements IBoard {
      * Print the two boards
      */
     public void print() {
-        System.out.println("Ship Grid");
+        System.out.println("   --  Ship Grid  -- ");
 
         System.out.print("   "); // lineNb space
         for (Character c = 'A'; c < 'A' + getSize() - 1; c++) {
@@ -173,7 +187,8 @@ public class Board implements IBoard {
             System.out.println();
         }
 
-        System.out.println("Hit Grid");
+        System.out.println();
+        System.out.println("   --  Hit Grid  --");
 
         System.out.print("   "); // lineNb space
         for (Character c = 'A'; c < 'A' + getSize() - 1; c++) {
@@ -244,6 +259,5 @@ public class Board implements IBoard {
                 this.hitGrid[x][y] = null;
             }
         }
-        // System.out.print(this.hitGrid[0][0]);
     }
 }

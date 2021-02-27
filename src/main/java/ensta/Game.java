@@ -1,8 +1,15 @@
 package ensta;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import ensta.AbstractShip.AbstractShip;
+import ensta.AbstractShip.BattleShip;
+import ensta.AbstractShip.Carrier;
+import ensta.AbstractShip.Destroyer;
+import ensta.AbstractShip.Submarine;
 
 public class Game {
 
@@ -141,7 +148,7 @@ public class Game {
             case MISS:
                 msg = hit.toString();
                 break;
-            case STIKE:
+            case STRUCK:
                 msg = hit.toString();
                 color = ColorUtil.Color.RED;
                 break;

@@ -1,6 +1,9 @@
 package ensta;
+
 import java.io.Serializable;
 import java.util.List;
+
+import ensta.AbstractShip.AbstractShip;
 
 public class AIPlayer extends Player {
     /* **

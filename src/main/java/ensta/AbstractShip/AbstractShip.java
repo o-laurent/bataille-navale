@@ -32,6 +32,9 @@ public class AbstractShip {
         this.strikeCount++;
     }
 
+    public int howStruck() {
+        return this.strikeCount;
+    }
     public boolean isSunk()
     {
         if (size == strikeCount) {

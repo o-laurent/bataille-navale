@@ -12,43 +12,46 @@ public class Board implements IBoard {
 
     public void putShip(AbstractShip ship, int x, int y) throws Exception {
         int gridSize = getSize();
-        if (x < 0 || y < 0 || x > gridSize + 1 || y > gridSize + 1) {
+        if (hasShip(x, y)) {
+            throw new Exception("There is already a ship at these coordinates.");
+        }
+        if (x < 1 || y < 1 || x > gridSize + 1 || y > gridSize + 1) {
             throw new Exception("The coordinates are wrong.");
         }
         Orientation orient = ship.getOrientation();
         int size = ship.getSize();
         switch (orient) {
             case EAST:
-                if (x + (size - 1) > size + 1) {
+                if ((y - 1) + (size - 1) >= getSize()) {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y + 1][x + i + 1] = new ShipState(ship);
+                    shipGrid[x - 1][y + i - 1] = new ShipState(ship);
                 }
                 break;
             case WEST:
-                if (x - (size - 1) < 0) {
+                if ((y - 1) - (size - 1) < 0) {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y + 1][x - i + 1] = new ShipState(ship);
+                    shipGrid[x - 1][y - i - 1] = new ShipState(ship);
                 }
                 break;
             case SOUTH:
-                if (y + (size - 1) > size + 1) {
+                if ((x - 1) + (size - 1) >= getSize()) {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y + i + 1][x + 1] = new ShipState(ship);
+                    shipGrid[x + i - 1][y - 1] = new ShipState(ship);
                 }
                 break;
 
             case NORTH:
-                if (y + (size - 1) < 0) {
+                if ((x - 1) - (size - 1) < 0) {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y - i + 1][x + 1] = new ShipState(ship);
+                    shipGrid[x - i - 1][y - 1] = new ShipState(ship);
                 }
                 break;
         }
@@ -60,7 +63,7 @@ public class Board implements IBoard {
         if (x < 1 || y < 1 || x > size || y > size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return !(shipGrid[y - 1][x - 1].getShip() == null);
+        return !(shipGrid[x - 1][y - 1].getShip() == null);
     }
 
     public void setHit(boolean hit, int x, int y) throws Exception {
@@ -68,7 +71,7 @@ public class Board implements IBoard {
         if (x < 1 || y < 1 || x > size || y > size) {
             throw new Exception("The coordinates are wrong.");
         }
-        hitGrid[y - 1][x - 1] = true;
+        hitGrid[x - 1][y - 1] = true;
     }
 
     public Boolean getHit(int x, int y) throws Exception {
@@ -76,7 +79,7 @@ public class Board implements IBoard {
         if (x < 1 || y < 1 || x > size || y > size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return hitGrid[y - 1][x - 1];
+        return hitGrid[x - 1][y - 1];
     }
 
     /**
@@ -123,32 +126,43 @@ public class Board implements IBoard {
     public void print() {
         System.out.println("Ship Grid");
 
-        System.out.print("  "); // lineNb space
-        for (Character c = 'A'; c < 'A' + getSize(); c++) {
+        System.out.print("   "); // lineNb space
+        for (Character c = 'A'; c < 'A' + getSize() - 1; c++) {
             System.out.print(c + " ");
         }
+        System.out.println((char) ('A' + getSize() - 1));
         int lineNb = 1;
         for (ShipState[] x : getShipGrid()) {
-            System.out.print(lineNb++ + " ");
+            if (lineNb < 10)
+                System.out.print(lineNb++ + "  ");
+            else
+                System.out.print(lineNb++ + " ");
             for (ShipState y : x) {
                 System.out.print(y + " ");
             }
             System.out.println();
         }
+
         System.out.println("Hit Grid");
-        for (Character c = 'A'; c < 'A' + getSize(); c++) {
+
+        System.out.print("   "); // lineNb space
+        for (Character c = 'A'; c < 'A' + getSize() - 1; c++) {
             System.out.print(c + " ");
         }
+        System.out.println((char) ('A' + getSize() - 1));
         lineNb = 1;
         for (Boolean[] x : getHitGrid()) {
-            System.out.print(lineNb++ + " ");
+            if (lineNb < 10)
+                System.out.print(lineNb++ + "  ");
+            else
+                System.out.print(lineNb++ + " ");
             for (Boolean y : x) {
-                if (y) {
-                    System.out.print(ColorUtil.colorize("X ", ColorUtil.Color.RED));
+                if (y == null) {
+                    System.out.print(". ");
                 } else if (y == false) {
                     System.out.print("X ");
                 } else {
-                    System.out.print(". ");
+                    System.out.print(ColorUtil.colorize("X ", ColorUtil.Color.RED));
                 }
 
             }
@@ -165,8 +179,19 @@ public class Board implements IBoard {
     public Board(String name, int gridSize) {
         this.name = name;
         this.gridSize = gridSize;
+
         this.shipGrid = new ShipState[gridSize][gridSize];
+        for (int x = 0; x < gridSize; ++x) {
+            for (int y = 0; y < gridSize; ++y) {
+                this.shipGrid[x][y] = new ShipState();
+            }
+        }
         this.hitGrid = new Boolean[gridSize][gridSize];
+        for (int x = 0; x < gridSize; ++x) {
+            for (int y = 0; y < gridSize; ++y) {
+                this.hitGrid[x][y] = null;
+            }
+        }
     }
 
     /**
@@ -176,7 +201,19 @@ public class Board implements IBoard {
      */
     public Board(String name) {
         this.name = name;
+        this.gridSize = 10;
         this.shipGrid = new ShipState[10][10];
+        for (int x = 0; x < 10; ++x) {
+            for (int y = 0; y < 10; ++y) {
+                this.shipGrid[x][y] = new ShipState();
+            }
+        }
         this.hitGrid = new Boolean[10][10];
+        for (int x = 0; x < 10; ++x) {
+            for (int y = 0; y < 10; ++y) {
+                this.hitGrid[x][y] = null;
+            }
+        }
+        // System.out.print(this.hitGrid[0][0]);
     }
 }

@@ -9,19 +9,15 @@ public class ShipState {
     public void addStrike() throws Exception {
         if (struck) {
             throw new Exception("The ship has already been struck");
-        }
-        else {
+        } else {
             this.struck = true;
         }
     }
-    public boolean isStruck(){
+
+    public boolean isStruck() {
         return this.struck;
     }
 
-    public String toString() {
-        return ColorUtil.colorize(ship.getFullname(), ColorUtil.Color.RED);
-    }
- 
     public boolean isSunk() {
         return this.ship.isSunk();
     }
@@ -42,5 +38,14 @@ public class ShipState {
     public ShipState(AbstractShip argShip) {
         this.ship = argShip;
         this.struck = false;
+    }
+
+    public String toString() {
+        if (this.ship != null) {
+            // return ColorUtil.colorize(ship.getFullname(), ColorUtil.Color.RED);
+            return ship.getLabel().toString();
+        } else {
+            return ".";
+        }
     }
 }

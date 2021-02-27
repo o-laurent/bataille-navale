@@ -2,11 +2,12 @@ package ensta;
 
 import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
+import ensta.AbstractShip.ShipState;
 
 public class Board implements IBoard {
     private String name;
     private int gridSize;
-    private Character[][] shipGrid;
+    private ShipState[][] shipGrid;
     private Boolean[][] hitGrid;
 
     public void putShip(AbstractShip ship, int x, int y) throws Exception {
@@ -14,7 +15,6 @@ public class Board implements IBoard {
         if (x < 0 || y < 0 || x > gridSize + 1 || y > gridSize + 1) {
             throw new Exception("The coordinates are wrong.");
         }
-        Character label = ship.getLabel();
         Orientation orient = ship.getOrientation();
         int size = ship.getSize();
         switch (orient) {
@@ -23,7 +23,7 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y + 1][x + i + 1] = label;
+                    shipGrid[y + 1][x + i + 1] = new ShipState(ship);
                 }
                 break;
             case WEST:
@@ -31,7 +31,7 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y + 1][x - i + 1] = label;
+                    shipGrid[y + 1][x - i + 1] = new ShipState(ship);
                 }
                 break;
             case SOUTH:
@@ -39,7 +39,7 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y + i + 1][x + 1] = label;
+                    shipGrid[y + i + 1][x + 1] = new ShipState(ship);
                 }
                 break;
 
@@ -48,7 +48,7 @@ public class Board implements IBoard {
                     throw new Exception("The coordinates are wrong.");
                 }
                 for (int i = 0; i < size; ++i) {
-                    shipGrid[y - i + 1][x + 1] = label;
+                    shipGrid[y - i + 1][x + 1] = new ShipState(ship);
                 }
                 break;
         }
@@ -60,7 +60,7 @@ public class Board implements IBoard {
         if (x < 1 || y < 1 || x > size || y > size) {
             throw new Exception("The coordinates are wrong.");
         }
-        return !(shipGrid[y - 1][x - 1] == Character.MIN_VALUE);
+        return !(shipGrid[y - 1][x - 1].getShip() == null);
     }
 
     public void setHit(boolean hit, int x, int y) throws Exception {
@@ -102,7 +102,7 @@ public class Board implements IBoard {
      * 
      * @return the ship grid
      */
-    public Character[][] getShip() {
+    public ShipState[][] getShipGrid() {
         return this.shipGrid;
     }
 
@@ -111,9 +111,11 @@ public class Board implements IBoard {
      * 
      * @return the hit grid
      */
-    public Boolean[][] getHit() {
+    public Boolean[][] getHitGrid() {
         return this.hitGrid;
     }
+
+    
 
     /**
      * Print the two boards
@@ -126,9 +128,9 @@ public class Board implements IBoard {
             System.out.print(c + " ");
         }
         int lineNb = 1;
-        for (Character[] x : getShip()) {
+        for (ShipState[] x : getShipGrid()) {
             System.out.print(lineNb++ + " ");
-            for (Character y : x) {
+            for (ShipState y : x) {
                 System.out.print(y + " ");
             }
             System.out.println();
@@ -138,14 +140,17 @@ public class Board implements IBoard {
             System.out.print(c + " ");
         }
         lineNb = 1;
-        for (Boolean[] x : getHit()) {
+        for (Boolean[] x : getHitGrid()) {
             System.out.print(lineNb++ + " ");
             for (Boolean y : x) {
                 if (y) {
-                    System.out.print("x ");
+                    System.out.print(ColorUtil.colorize("X ", ColorUtil.Color.RED));
+                } else if (y == false) {
+                    System.out.print("X ");
                 } else {
                     System.out.print(". ");
                 }
+
             }
             System.out.println();
         }
@@ -160,7 +165,7 @@ public class Board implements IBoard {
     public Board(String name, int gridSize) {
         this.name = name;
         this.gridSize = gridSize;
-        this.shipGrid = new Character[gridSize][gridSize];
+        this.shipGrid = new ShipState[gridSize][gridSize];
         this.hitGrid = new Boolean[gridSize][gridSize];
     }
 
@@ -171,7 +176,7 @@ public class Board implements IBoard {
      */
     public Board(String name) {
         this.name = name;
-        this.shipGrid = new Character[10][10];
+        this.shipGrid = new ShipState[10][10];
         this.hitGrid = new Boolean[10][10];
     }
 }

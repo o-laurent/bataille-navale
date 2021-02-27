@@ -6,10 +6,12 @@ public class AbstractShip {
     private int size;
     private Orientation orientation;
 
+    private int strikeCount;
+
     public Character getLabel() {
         return this.label;
     }
-    
+
     public String getFullname() {
         return this.fullname;
     }
@@ -26,10 +28,24 @@ public class AbstractShip {
         this.orientation = orient;
     }
 
+    public void addStrike() {
+        this.strikeCount++;
+    }
+
+    public boolean isSunk()
+    {
+        if (size == strikeCount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public AbstractShip(String fullname, Character label, int size, Orientation orient) {
         this.fullname = fullname;
         this.label = label;
         this.size = size;
         this.orientation = orient;
+        this.strikeCount = 0;
     }
 }

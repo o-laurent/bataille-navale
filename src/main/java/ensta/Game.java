@@ -131,8 +131,8 @@ public class Game {
             try {
                 FileInputStream fi = new FileInputStream(SAVE_FILE);
                 ObjectInputStream oi = new ObjectInputStream(fi);
-                this.player1 = (Player)oi.readObject();
-                this.player2 = (Player)oi.readObject();
+                this.player1 = (Player) oi.readObject();
+                this.player2 = (Player) oi.readObject();
                 oi.close();
                 return true;
             } catch (IOException | ClassNotFoundException e) {

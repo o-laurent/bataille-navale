@@ -6,7 +6,7 @@ import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
 import ensta.AbstractShip.ShipState;
 
-public class Board implements IBoard, Serializable{
+public class Board implements IBoard, Serializable {
     private static final long serialVersionUID = 3L;
 
     private String name;
@@ -140,7 +140,7 @@ public class Board implements IBoard, Serializable{
         // TRUE COORDINATES
         int value = 0;
         ShipState shipState = this.getShipGrid()[x][y];
-        System.out.println("x:"+x+" y:"+y);
+        System.out.println("x:" + x + " y:" + y);
         try {
             shipState.addStrike();
         } catch (Exception exception) {

@@ -1,17 +1,20 @@
 package ensta;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public final class InputHelper implements Serializable {
+    private static final long serialVersionUID = 10L;
 
-    /* **
-     * Constructeur
+    /*
+     * ** Constructeur
      */
-    private InputHelper() {}
+    private InputHelper() {
+    }
 
-    /* **
-     * Classe ShipInput, interne à InputHelper
+    /*
+     * ** Classe ShipInput, interne à InputHelper
      */
     public static class ShipInput {
         public String orientation;
@@ -19,22 +22,22 @@ public final class InputHelper implements Serializable {
         public int y;
     }
 
-    /* **
-     * Classe CoordInput, interne à InputHelper
+    /*
+     * ** Classe CoordInput, interne à InputHelper
      */
     public static class CoordInput {
         public int x;
         public int y;
     }
 
-    /* **
-     * Méthodes de la classe InputHelper
+    /*
+     * ** Méthodes de la classe InputHelper
      */
     public static ShipInput readShipInput() {
         @SuppressWarnings("resource")
         Scanner sin = new Scanner(System.in);
         ShipInput res = new ShipInput();
-        String[] validOrientations = {"n", "s", "e", "w"}; // North, South, East, West
+        String[] validOrientations = { "n", "s", "e", "w" }; // North, South, East, West
         boolean done = false;
 
         do {

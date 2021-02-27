@@ -5,7 +5,6 @@ import ensta.AbstractShip.Carrier;
 import ensta.AbstractShip.Destroyer;
 import ensta.AbstractShip.Orientation;
 
-
 public class TestBoard {
     public static void main(String[] args) {
         Board player1Board = new Board("Player 1");
@@ -17,11 +16,10 @@ public class TestBoard {
             player1Board.putShip(carrier, 1, 1);
             player1Board.putShip(bShip, 2, 1);
             player1Board.putShip(destr, 9, 1);
-        }
-        catch (Exception errException) {
+        } catch (Exception errException) {
             System.out.println(errException);
         }
-    
+
         System.out.println(player1Board.sendHit(1, 1));
         System.out.println(player1Board.sendHit(1, 2));
         System.out.println(player1Board.sendHit(1, 3));

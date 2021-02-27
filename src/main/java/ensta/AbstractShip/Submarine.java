@@ -1,6 +1,6 @@
 package ensta.AbstractShip;
 
-public class Submarine extends AbstractShip{
+public class Submarine extends AbstractShip {
     private static final long serialVersionUID = 8L;
 
     public Submarine() {

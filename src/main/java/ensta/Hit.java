@@ -1,31 +1,27 @@
 package ensta;
+
 import java.util.NoSuchElementException;
 
 public enum Hit {
-    ERROR(0, "Error"),
-    MISS(-1, "manqué"),
-    STRUCK(-2, "touché"),
-    DESTROYER(2, "Frégate"),
-    SUBMARINE(3, "Sous-marin"),
-    BATTLESHIP(4, "Croiseur"),
-    CARRIER(5, "Porte-avion");
+    ERROR(0, "Error"), MISS(-1, "manqué"), STRUCK(-2, "touché"), DESTROYER(2, "Frégate"), SUBMARINE(3, "Sous-marin"),
+    BATTLESHIP(4, "Croiseur"), CARRIER(5, "Porte-avion");
 
-    /* ***
-     * Attributs
+    /*
+     * *** Attributs
      */
     private int value;
     private String label;
 
-    /* ***
-     * Constructeur
+    /*
+     * *** Constructeur
      */
     Hit(int value, String label) {
         this.value = value;
         this.label = label;
     }
 
-    /* ***
-     * Méthodes
+    /*
+     * *** Méthodes
      */
     public static Hit fromInt(int value) {
         for (Hit hit : Hit.values()) {
@@ -39,7 +35,7 @@ public enum Hit {
     public int getValue() {
         return this.value;
     }
-    
+
     public String toString() {
         return this.label;
     }

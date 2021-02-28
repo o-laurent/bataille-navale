@@ -1,6 +1,7 @@
 package ensta;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,29 +13,38 @@ import ensta.AbstractShip.Destroyer;
 import ensta.AbstractShip.Submarine;
 
 public class Game {
-    /*
-     * *** Constante
+    /**
+     * The File Object which contains the data to be loaded or will contain the data
+     * to store.
      */
     public static final File SAVE_FILE = new File("savegame.dat");
 
-    /*
-     * *** Attributs
+    /**
+     * Attributs
      */
     public Playing playing;
     private Player player1;
     private Player player2;
     private Scanner sin;
 
-    /*
-     * *** Constructeurs
+    /**
+     * Default Constructor which defines player1 as the current player
      */
     public Game() {
         this.playing = new Playing(1);
     }
 
+    /**
+     * Public method to initialize the game (1 or 2 players)
+     * 
+     * @param twoPlayers true if 2p game, false if 1p game
+     * @return the initizalized game
+     */
     public Game init(boolean twoPlayers) {
 
         if (!loadSave()) {
+
+            // 1 Player 1 Computer
             if (!twoPlayers) {
                 this.sin = new Scanner(System.in);
                 // init attributes
@@ -52,7 +62,10 @@ public class Game {
                 // place player ships
                 player1.putShips();
                 player2.putShips();
-            } else {
+            }
+
+            // 2Players
+            else {
                 this.sin = new Scanner(System.in);
 
                 System.out.println("\033[0;1m" + "Joueur 1: Entre ton nom:" + "\033[0m"); // Bold for UNIX
@@ -82,10 +95,14 @@ public class Game {
         return this;
     }
 
-    /*
-     * *** Méthodes
+    /**
+     * Public method which starts the game (1 or 2 players)
+     * 
+     * @param twoPlayers true if 2p game, false if 1p game
      */
     public void run(boolean twoPlayers) {
+
+        // 1 Player 1 Computer
         if (!twoPlayers) {
             int[] coords = new int[2];
             Board b1 = this.player1.board;
@@ -135,18 +152,22 @@ public class Game {
             SAVE_FILE.delete();
             System.out.println("\033[0;1m" + String.format("joueur %d gagne", player1.lose ? 2 : 1) + "\033[0m");
             sin.close();
-        } else {
+        }
+
+        // 2 Players
+        else {
             int[] coords = new int[2];
             Board b1 = this.player1.board;
             Board b2 = this.player2.board;
             Hit hit;
-
+            ArrayList<Hit> hits = new ArrayList<Hit>(); // Remember the incoming hits
+            ArrayList<int[]> hitCoords = new ArrayList<int[]>();
+            ;
             // main loop
 
             boolean done;
+            System.out.println("\033[0;1m" + b1.getName() + " voici tes grilles." + "\033[0m");
             do {
-                clearTerminal();
-                System.out.println("\033[0;1m" + b1.getName() + " voici tes grilles." + "\033[0m");
                 b1.print();
                 hit = this.player1.sendHit(coords);
 
@@ -159,12 +180,12 @@ public class Game {
 
                 done = updateScore();
 
-                b1.print();
-
                 System.out.println(makeHitMessage(false /* outgoing hit */, coords, hit));
+                hits.add(hit);
+                hitCoords.add(coords.clone());
                 sleep(2500);
 
-                if (!strike)
+                if (!done && !strike)
                     this.playing.setPlayer(2);
                 save();
 
@@ -175,22 +196,37 @@ public class Game {
                     sleep(5000);
                     clearTerminal();
                     sleep(2500);
+                    System.out.println("\033[0;1m" + "  --  Résumé du tour adverse  --" + "\033[0m");
+                    // Print all the incoming hits and clear
+                    for (int h = 0; h < hits.size(); ++h) {
+                        System.out.println(makeHitMessage(true /* incoming hit */, hitCoords.get(h), hits.get(h)));
+                    }
+                    hits.clear();
+                    hitCoords.clear();
+
                     System.out.println("\033[0;1m" + b2.getName() + " voici tes grilles." + "\033[0m");
 
                     do {
                         b2.print();
-                        hit = player2.sendHit(coords);
+                        hit = this.player2.sendHit(coords);
 
                         strike = hit != Hit.MISS;
-
-                        System.out.println(makeHitMessage(true /* incoming hit */, coords, hit));
+                        try {
+                            b1.setHit(strike, coords[0], coords[1]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         done = updateScore();
 
+                        System.out.println(makeHitMessage(false /* outgoing hit */, coords, hit));
+                        hits.add(hit);
+                        hitCoords.add(coords.clone());
+                        sleep(2500);
+
                         if (!done) {
-                            save();
                             if (!strike)
                                 this.playing.setPlayer(1);
-
+                            save(); // Save after changing current player
                         }
                     } while (strike && !done);
                     sleep(2500);
@@ -201,7 +237,16 @@ public class Game {
                     clearTerminal();
                     sleep(2500);
                 }
-
+                if (!strike) {
+                    clearTerminal();
+                    System.out.println("\033[0;1m" + "  --  Résumé du tour adverse  --" + "\033[0m");
+                    for (int h = 0; h < hits.size(); ++h) {
+                        System.out.println(makeHitMessage(true /* incoming hit */, hitCoords.get(h), hits.get(h)));
+                    }
+                    hits.clear();
+                    hitCoords.clear();
+                    System.out.println("\033[0;1m" + b1.getName() + " voici tes grilles." + "\033[0m");
+                }
             } while (!done);
 
             SAVE_FILE.delete();
@@ -211,6 +256,9 @@ public class Game {
 
     }
 
+    /**
+     * Private method which saves the current game state
+     */
     private void save() {
         try {
             if (!SAVE_FILE.exists()) {
@@ -234,6 +282,11 @@ public class Game {
 
     }
 
+    /**
+     * Private method which loads the previous game state if it exists
+     * 
+     * @return ture if a game can be loaded, false if non
+     */
     private boolean loadSave() {
         if (SAVE_FILE.exists()) {
             try {
@@ -254,6 +307,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * Private method which evaluates the score to find out when the game is over
+     * 
+     * @return true if the game is finished, false if not
+     */
     private boolean updateScore() {
         for (Player player : new Player[] { player1, player2 }) {
             int destroyed = 0;
@@ -272,6 +330,14 @@ public class Game {
         return false;
     }
 
+    /**
+     * Private method which tells the current user if the hit was successful or not
+     * 
+     * @param incoming
+     * @param coords
+     * @param hit
+     * @return
+     */
     private String makeHitMessage(boolean incoming, int[] coords, Hit hit) {
         String msg;
         ColorUtil.Color color = ColorUtil.Color.RESET;
@@ -297,6 +363,12 @@ public class Game {
                 new Carrier() });
     }
 
+    /**
+     * Private static method which make the program wait for a better 2 player
+     * experience
+     * 
+     * @param ms the number of milliseconds to wait for
+     */
     private static void sleep(int ms) {
         try {
             Thread.sleep(ms);
@@ -305,11 +377,20 @@ public class Game {
         }
     }
 
+    /**
+     * Public static method which clears UNIX terminals.
+     */
     public static void clearTerminal() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    /**
+     * Main function which launches the game and check whether it is a 1player ou
+     * 2players game.
+     * 
+     * @param args the arguments given on the console
+     */
     public static void main(String args[]) {
         boolean twoPlayers = false;
         if (args.length == 0) {

@@ -7,21 +7,28 @@ public enum Hit {
     BATTLESHIP(4, "Croiseur"), CARRIER(5, "Porte-avion");
 
     /*
-     * *** Attributs
+     * *** Attributes
      */
     private int value;
     private String label;
 
-    /*
-     * *** Constructeur
+    /***
+     * Valued constructor
+     * 
+     * @param value state of the hit as an int
+     * @param label state of the hit as a string
      */
     Hit(int value, String label) {
         this.value = value;
         this.label = label;
     }
 
-    /*
-     * *** Méthodes
+    /**
+     * Public method to create a Hit from a value
+     * 
+     * @param value the value of the future hit
+     * @return the hit
+     * @throws Exception if the value doesn't fit with a Hit
      */
     public static Hit fromInt(int value) {
         for (Hit hit : Hit.values()) {
@@ -32,10 +39,20 @@ public enum Hit {
         throw new NoSuchElementException("no enum for value " + value);
     }
 
+    /**
+     * Public method to get the value of the hit (GETTER)
+     * 
+     * @return the value
+     */
     public int getValue() {
         return this.value;
     }
 
+    /**
+     * Public method to stringify the Object
+     * 
+     * @return the corresponding string
+     */
     public String toString() {
         return this.label;
     }

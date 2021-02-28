@@ -7,10 +7,10 @@ import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
 
 public class BattleShipsAI implements Serializable {
-    private static final long serialVersionUID = 11L;
-    /*
-     * ** Attributs
+    /**
+     * Default UID
      */
+    private static final long serialVersionUID = 11L;
 
     /**
      * grid size.
@@ -39,12 +39,9 @@ public class BattleShipsAI implements Serializable {
      */
     private Boolean lastVertical;
 
-    /*
-     * ** Constructeur
-     */
-
     /**
-     *
+     * Valued constructor
+     * 
      * @param myBoard       board where ships will be put.
      * @param opponentBoard Opponent's board, where hits will be sent.
      */
@@ -53,10 +50,6 @@ public class BattleShipsAI implements Serializable {
         this.opponent = opponentBoard;
         this.size = board.getSize();
     }
-
-    /*
-     * ** Méthodes publiques
-     */
 
     /**
      * Put the ships on owned board.
@@ -75,10 +68,10 @@ public class BattleShipsAI implements Serializable {
                 y = rand.nextInt(size);
                 o = orientations[rand.nextInt(4)];
                 s.setOrientation(o);
-            } while (!canPutShip(s, x+1, y+1));
-            
+            } while (!canPutShip(s, x + 1, y + 1));
+
             try {
-                board.putShip(s, x+1, y+1);
+                board.putShip(s, x + 1, y + 1);
             } catch (Exception err) {
                 System.out.println(err);
                 System.out.println("Development error");
@@ -89,11 +82,12 @@ public class BattleShipsAI implements Serializable {
 
     /**
      *
-     * @param coords array must be of size 2. Will hold the coord of the send hit.
+     * @param coords array must be of size 2. Will hold the COMPUTER coord of the
+     *               send hit.
      * @return the status of the hit.
      */
     public Hit sendHit(int[] coords) {
-        // TRUE COORDINATES !!!! [0, size-1]
+
         int res[] = null;
         if (coords == null || coords.length < 2) {
             throw new IllegalArgumentException("must provide an initialized array of size 2");
@@ -149,30 +143,34 @@ public class BattleShipsAI implements Serializable {
         return hit;
     }
 
-    /*
-     * *** Méthodes privées
+    /**
+     * Private method to check whether a ship can be put on the coordinates
+     * 
+     * @param ship the ship to be placed
+     * @param x    the USER coordinates of the y-axis
+     * @param y    the USER coordinates of the x-axis
+     * @return the corresponding boolean
      */
-
     private boolean canPutShip(AbstractShip ship, int x, int y) {
         Orientation o = ship.getOrientation();
         int dx = 0, dy = 0;
         if (o == Orientation.EAST) {
-            if (y-1 + ship.getSize()-1 >= this.size) {
+            if (y - 1 + ship.getSize() - 1 >= this.size) {
                 return false;
             }
             dy = 1;
         } else if (o == Orientation.SOUTH) {
-            if ((x-1) + (ship.getSize()-1) >= this.size) {
+            if ((x - 1) + (ship.getSize() - 1) >= this.size) {
                 return false;
             }
             dx = 1;
         } else if (o == Orientation.NORTH) {
-            if ((x-1) - (ship.getSize()-1) < 0) {
+            if ((x - 1) - (ship.getSize() - 1) < 0) {
                 return false;
             }
             dx = -1;
         } else if (o == Orientation.WEST) {
-            if ((y-1) - (ship.getSize()-1) < 0) {
+            if ((y - 1) - (ship.getSize() - 1) < 0) {
                 return false;
             }
             dy = -1;
@@ -198,10 +196,24 @@ public class BattleShipsAI implements Serializable {
         return true;
     }
 
+    /**
+     * Private method to guess the Orientation
+     * 
+     * @param c1
+     * @param c2
+     * @return
+     */
     private boolean guessOrientation(int[] c1, int[] c2) {
         return c1[0] == c2[0];
     }
 
+    /**
+     * Private method which returns if the coordinates are valid and not yet struck
+     * 
+     * @param x COMPUTER y-axis coordinate
+     * @param y COMPUTER x-axis coordinate
+     * @return the corresponding boolean
+     */
     private boolean isUndiscovered(int x, int y) {
         try {
             return x >= 0 && x < size && y >= 0 && y < size && board.getHit(x, y) == null;
@@ -212,6 +224,11 @@ public class BattleShipsAI implements Serializable {
         }
     }
 
+    /**
+     * Pick a good pair of coordinates - not yet struck
+     * 
+     * @return the pair of coordinates
+     */
     private int[] pickRandomCoord() {
         Random rnd = new Random();
         int x;

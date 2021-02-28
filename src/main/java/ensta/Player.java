@@ -7,9 +7,13 @@ import ensta.AbstractShip.AbstractShip;
 import ensta.AbstractShip.Orientation;
 
 public class Player implements Serializable {
+    /**
+     * Default UID
+     */
     private static final long serialVersionUID = 1L;
+
     /*
-     * ** Attributs
+     * ** Attributes
      */
     protected Board board;
     protected Board opponentBoard;
@@ -17,8 +21,12 @@ public class Player implements Serializable {
     protected AbstractShip[] ships;
     protected boolean lose;
 
-    /*
-     * ** Constructeur
+    /**
+     * A valued constructor
+     * 
+     * @param board
+     * @param opponentBoard
+     * @param ships
      */
     public Player(Board board, Board opponentBoard, List<AbstractShip> ships) {
         this.board = board;
@@ -70,7 +78,7 @@ public class Player implements Serializable {
 
                 this.board.putShip(s, x + 1, y + 1);
             } catch (Exception exc) {
-                System.out.println("Erreur dans le placement du bâteau: x=" + x + " y=" + y);
+                System.out.println("Erreur dans le placement du bâteau");
                 --i;
             }
             done = (i == 5);
@@ -79,6 +87,11 @@ public class Player implements Serializable {
         } while (!done);
     }
 
+    /**
+     * Public method to get the user input and send it to the opponent board
+     * 
+     * @return the status of the hit
+     */
     public Hit sendHit(int[] coords) {
         boolean done = false;
         Hit hit = null;
@@ -88,9 +101,8 @@ public class Player implements Serializable {
             System.out.println("Où souhaitez-vous frapper?");
             hitInput = InputHelper.readCoordInput();
 
-            System.out.println("x:" + hitInput.x + " y:" + hitInput.y);
             hit = this.opponentBoard.sendHit(hitInput.x, hitInput.y);
-            if (hit != Hit.ERROR)
+            if (hit.getValue() != 0) // Hit.ERROR
                 done = true;
             else
                 System.out.println("Tir refusé ! Les coordonnées sont impossibles ou zone déjà touchée.");
@@ -101,10 +113,20 @@ public class Player implements Serializable {
         return hit;
     }
 
+    /**
+     * Public method to get the player's ships (GETTER)
+     * 
+     * @return the ships
+     */
     public AbstractShip[] getShips() {
         return this.ships;
     }
 
+    /**
+     * Public method to set the player's ships (SETTER)
+     * 
+     * @param ships the input ships
+     */
     public void setShips(AbstractShip[] ships) {
         this.ships = ships;
     }

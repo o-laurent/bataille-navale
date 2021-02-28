@@ -7,14 +7,14 @@ import java.util.Scanner;
 public final class InputHelper implements Serializable {
     private static final long serialVersionUID = 10L;
 
-    /*
-     * ** Constructeur
+    /**
+     * The Default constructor
      */
     private InputHelper() {
     }
 
     /*
-     * ** Classe ShipInput, interne à InputHelper
+     * Classe ShipInput, interne à InputHelper
      */
     public static class ShipInput {
         public String orientation;
@@ -23,7 +23,7 @@ public final class InputHelper implements Serializable {
     }
 
     /*
-     * ** Classe CoordInput, interne à InputHelper
+     * Classe CoordInput, interne à InputHelper
      */
     public static class CoordInput {
         public int x;
@@ -31,7 +31,7 @@ public final class InputHelper implements Serializable {
     }
 
     /*
-     * ** Méthodes de la classe InputHelper
+     * Méthodes de la classe InputHelper
      */
     public static ShipInput readShipInput() {
         @SuppressWarnings("resource")
@@ -64,6 +64,11 @@ public final class InputHelper implements Serializable {
         return res;
     }
 
+    /**
+     * Read input coordinates from the user
+     * 
+     * @return
+     */
     public static CoordInput readCoordInput() {
         @SuppressWarnings("resource")
         Scanner sin = new Scanner(System.in);

@@ -16,9 +16,11 @@ Le choix du système de coordonnées n'était pas explicite dans la définition 
 
 ### Représentation (x,y) de la grille
 
-Ayant choisi x et y différemment, j'ai inversé toutes les fonctions précodées utilisant les coordonnées (notamment dans utils).
+Ayant choisi x et y différemment, j'ai inversé toutes les fonctions précodées utilisant les coordonnées (notamment dans util).
 
-### Façon propre de commencer par le bon joueur et coupure avant le coup de l'ordinateur
+### Façon propre de commencer par le bon joueur / Coupure avant le coup de l'ordinateur
+
+Pour ce faire, j'ai dû créer une nouvelle classe sérialisable retenant le numéro du joueur dont le tour est en cours. Lors du chargement de la sauvegarde, s'il s'agit du tour du joueur 2, celui-ci devient le joueur n°1. Toutefois, les coups en cours ne sont pas retenus. C'est-à-dire que le résumé du tour de l'adversaire ne sera pas complet si une coupure interromp l'adversaire. La sauvegarde de ces coups n'est aps particulièrement compliquée mais le temps me manque. A noter que la gestion des tours n'est pas effectuée avec l'ordinateur dont on suppose qu'il joue instantanément. Une partie commencée dans un des modes ne peut pas être reprise correctement dans un autre mode.
 
 ### Petite erreur de doublon de ships qui posait des problèmes de référence
 

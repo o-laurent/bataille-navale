@@ -7,15 +7,42 @@ import ensta.AbstractShip.Orientation;
 import ensta.AbstractShip.ShipState;
 
 public class Board implements IBoard, Serializable {
+    /**
+     * Default UID
+     */
     private static final long serialVersionUID = 3L;
 
+    /**
+     * The name of the board/player.
+     */
     private String name;
+
+    /**
+     * The size of the Boards.
+     */
     private int gridSize;
+
+    /**
+     * The board representing the ships.
+     */
     private ShipState[][] shipGrid;
+
+    /**
+     * The board memorizing the hits.
+     */
     private Boolean[][] hitGrid;
 
+    /**
+     * Method add a ship on the ShipState board
+     * 
+     * @param ship the ship that is to be placed
+     * @param x    The USER y-axis coordinate
+     * @param y    The USER x-axis coordinate
+     * @throws Exception if x or y are not good USER coordinates or if the ship
+     *                   cannot be placed (already a ship at these coordinates)
+     */
     public void putShip(AbstractShip ship, int x, int y) throws Exception {
-        // USER COORDINATES
+
         int gridSize = getSize();
         if (hasShip(x, y)) {
             throw new Exception("There is already a ship at these coordinates.");
@@ -75,6 +102,14 @@ public class Board implements IBoard, Serializable {
 
     }
 
+    /**
+     * Method to know if there is a ship on the specified coordinates
+     * 
+     * @param x The USER y-axis coordinate
+     * @param y The USER x-axis coordinate
+     * @return true if there is a ship, false if not
+     * @throws Exception if x or y are not good USER coordinates
+     */
     public boolean hasShip(int x, int y) throws Exception {
         int size = this.getSize();
         if (x < 1 || y < 1 || x > size || y > size) {
@@ -83,8 +118,14 @@ public class Board implements IBoard, Serializable {
         return !(this.shipGrid[x - 1][y - 1].getShip() == null || this.shipGrid[x - 1][y - 1].isSunk());
     }
 
+    /**
+     * Method to set a hit defined by the coordinates x and y
+     * 
+     * @param x The COMPUTER y-axis coordinate
+     * @param y The COMPUTER x-axis coordinate
+     * @throws Exception if x or y are not good COMPUTER coordinates
+     */
     public void setHit(boolean hit, int x, int y) throws Exception {
-        // TRUE COORDINATES !!
         int size = this.getSize();
         if (x < 0 || y < 0 || x >= size || y >= size) {
             throw new Exception("The coordinates are wrong.");
@@ -92,6 +133,14 @@ public class Board implements IBoard, Serializable {
         this.hitGrid[x][y] = hit;
     }
 
+    /**
+     * Method to get a hit defined by the coordinates x and y
+     * 
+     * @param x The COMPUTER y-axis coordinate
+     * @param y The COMPUTER x-axis coordinate
+     * @return null, true or false depending of the hit
+     * @throws Exception if x or y are not good COMPUTER coordinates
+     */
     public Boolean getHit(int x, int y) throws Exception {
         int size = getSize();
         if (x < 0 || y < 0 || x >= size || y >= size) {
@@ -101,50 +150,59 @@ public class Board implements IBoard, Serializable {
     }
 
     /**
-     * Get the name of the board
+     * Public method to get the name of the board/player (GETTER)
      * 
-     * @return fullname
+     * @return the name of the player
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * Get the size of the board
+     * Public method to get the size of the board (GETTER)
      * 
-     * @return size
+     * @return the size of the board
      */
     public int getSize() {
         return this.gridSize;
     }
 
     /**
-     * Get the whole shipGrid
+     * Method to get the whole shipGrid (GETTER)
      * 
-     * @return the ship grid
+     * @return the ship grid made of ShipStates
      */
     public ShipState[][] getShipGrid() {
         return this.shipGrid;
     }
 
     /**
-     * Get the whole hitGrid
+     * Public method to get the whole hitGrid
      * 
-     * @return the hit grid
+     * @return the hit grid (of null -not struck-, true -struck with a ship- or
+     *         false -struck without ship-)
      */
     public Boolean[][] getHitGrid() {
         return this.hitGrid;
     }
 
+    /**
+     * Method to compute a hit defined by the coordinates x and y
+     * 
+     * @param x The COMPUTER y-axis coordinate
+     * @param y The COMPUTER x-axis coordinate
+     * @return a hit which expresses if the strike is a MISS, STRUCK or sunk a
+     *         particular ship
+     */
     public Hit sendHit(int x, int y) {
-        // TRUE COORDINATES
         int value = 0;
-        ShipState shipState = this.getShipGrid()[x][y];
-        System.out.println("x:" + x + " y:" + y);
+        ShipState shipState = new ShipState();
         try {
+            shipState = this.getShipGrid()[x][y];
             shipState.addStrike();
         } catch (Exception exception) {
             value = 0; // Error
+            return Hit.fromInt(value);
         }
         if (shipState.getShip() == null) {
             value = -1;
@@ -224,8 +282,8 @@ public class Board implements IBoard, Serializable {
     /**
      * Valued contructor
      * 
-     * @param name
-     * @param gridSize
+     * @param name     the name of the player
+     * @param gridSize the size of the grids
      */
     public Board(String name, int gridSize) {
         this.name = name;
@@ -248,7 +306,7 @@ public class Board implements IBoard, Serializable {
     /**
      * Valued contructor
      * 
-     * @param name
+     * @param name the name of the player
      */
     public Board(String name) {
         this.name = name;
